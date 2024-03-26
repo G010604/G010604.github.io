@@ -39,10 +39,15 @@
                 var plataforma = jogo.platforms.map(function (plataforma) {
                     return plataforma.platform.name;
                 }).join(", ");
+                var imagem = jogo.background_image;
+
+                var imgElement = document.createElement("img");
+                imgElement.src = imagem;
 
                 var pElement = document.createElement("p");
                 pElement.textContent = titulo + " - Plataformas: " + plataforma;
 
+                resultadosDiv.appendChild(imgElement);
                 resultadosDiv.appendChild(pElement);
             });
         }
