@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,16 +18,14 @@
             var url = "https://api.rawg.io/api/games?search=" + encodeURIComponent(nomeJogo) + "&key=" + apiKey;
 
             fetch(url)
-                .then(function(response) {
+                .then(response => {
                     if (!response.ok) {
-                        throw new Error('Erro ao buscar jogo. Por favor, tente novamente mais tarde.');
+                        throw new Error("Erro ao buscar jogo. Por favor, tente novamente mais tarde.");
                     }
                     return response.json();
                 })
-                .then(function(data) {
-                    exibirResultados(data);
-                })
-                .catch(function(error) {
+                .then(response => exibirResultados(response))
+                .catch(error => {
                     mensagemErro.textContent = error.message;
                 });
         }
@@ -41,15 +39,10 @@
                 var plataforma = jogo.platforms.map(function (plataforma) {
                     return plataforma.platform.name;
                 }).join(", ");
-                var imagem = jogo.background_image;
-
-                var imgElement = document.createElement("img");
-                imgElement.src = imagem;
 
                 var pElement = document.createElement("p");
                 pElement.textContent = titulo + " - Plataformas: " + plataforma;
 
-                resultadosDiv.appendChild(imgElement);
                 resultadosDiv.appendChild(pElement);
             });
         }
@@ -63,4 +56,3 @@
     <div id="resultados"></div>
 </body>
 </html>
-
