@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de jogos</title>
+    <script>
+        function buscarJogo() {
+            var nomeJogo = document.getElementById("nomeJogo").value.trim();
+            var mensagemErro = document.getElementById("mensagemErro");
+
+            if (nomeJogo === "") {
+                mensagemErro.textContent = "Por favor, insira o nome do jogo.";
+                return;
+            }
+
+            var apiKey = 'd209e82699274d69bc9dc1012f9b73b7';
+            var url = "https://api.rawg.io/api/games?search=" + encodeURIComponent(nomeJogo) + "&key=" + apiKey;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro ao buscar jogo. Por favor, tente novamente mais tarde.");
+                    }
+                    return response.json();
+                })
+                .then(response => exibirResultados(response))
+                .catch(error => {
+                    mensagemErro.textContent = error.message;
+                });
+        }
+
+        function exibirResultados(response) {
+            var resultadosDiv = document.getElementById("resultados");
+            resultadosDiv.innerHTML = "";
+
+            response.results.forEach(function (jogo) {
+                var titulo = jogo.name;
+                var plataforma = jogo.platforms.map(function (plataforma) {
+                    return plataforma.platform.name;
+                }).join(", ");
+
+                var pElement = document.createElement("p");
+                pElement.textContent = titulo + " - Plataformas: " + plataforma;
+
+                resultadosDiv.appendChild(pElement);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Busca de Jogos</h1>
+    <input type="text" id="nomeJogo" placeholder="Digite o nome do jogo">
+    <button onclick="buscarJogo()">Buscar</button>
+    <div id="mensagemErro" style="color: red;"></div>
+    <div id="resultados"></div>
+</body>
+</html>
